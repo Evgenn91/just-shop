@@ -1,15 +1,14 @@
-version: "3.9"
-
 services:
   db:
     image: postgres:15
-    container_name: shop_pgsql
+    container_name: postgres-shop
+    restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"  # внешний порт 5433, чтобы не конфликтовал с локальной БД
     environment:
       POSTGRES_DB: justshop
-      POSTGRES_USER: justshop
-      POSTGRES_PASSWORD: justshop
+      POSTGRES_USER: shopuser
+      POSTGRES_PASSWORD: shop123
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
