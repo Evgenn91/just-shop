@@ -2,32 +2,17 @@ package evn.petproject.just_shop.mapper;
 
 import evn.petproject.just_shop.dto.ProductDto;
 import evn.petproject.just_shop.entity.Product;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class ProductMapper {
-    public ProductDto toDto(Product entity) {
-        if (entity == null) return null;
+@Mapper(componentModel = "spring")
+public interface ProductMapper {
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
-        ProductDto dto = new ProductDto();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setPrice(entity.getPrice());
-        dto.setCreatedAt(entity.getCreatedAt());
-        dto.setUpdatedAt(entity.getUpdatedAt());
-        dto.setVersion(entity.getVersion());
-        return dto;
-    }
+    ProductDto toDto(Product entity);
 
-    public Product toEntity(ProductDto dto) {
-        if (dto == null) return null;
-
-        Product entity = new Product();
-        entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setPrice(dto.getPrice());
-        // поля createdAt/updatedAt управляются JPA, не заполняем вручную
-        entity.setVersion(dto.getVersion());
-        return entity;
-    }
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    Product toEntity(ProductDto dto);
 }

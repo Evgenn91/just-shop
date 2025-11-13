@@ -15,27 +15,27 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
     private final ProductService productService;
-    private final ProductMapper productMapper;
+    private final ProductMapper mapper;
 
-    public ProductController(ProductService productService, ProductMapper productMapper) {
+    public ProductController(ProductService productService, ProductMapper mapper) {
         this.productService = productService;
-        this.productMapper = productMapper;
+        this.mapper = mapper;
     }
 
     // ---------- CREATE ----------
     @PostMapping
     public ResponseEntity<ProductDto> create(@RequestBody ProductDto dto) {
-        Product entity = productMapper.toEntity(dto);
+        Product entity = mapper.toEntity(dto);
         Product saved = productService.create(entity);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(productMapper.toDto(saved));
+                .body(mapper.toDto(saved));
     }
 
     // ---------- READ (single) ----------
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
         return productService.getById(id)
-                .map(productMapper::toDto)
+                .map(mapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -45,7 +45,7 @@ public class ProductController {
     public ResponseEntity<List<ProductDto>> getAll() {
         List<ProductDto> products = productService.getAll()
                 .stream()
-                .map(productMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
         return ResponseEntity.ok(products);
     }
@@ -53,8 +53,8 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> update(@PathVariable Long id, @RequestBody ProductDto dto) {
         dto.setId(id);
-        Product updated = productService.update(productMapper.toEntity(dto));
-        return ResponseEntity.ok(productMapper.toDto(updated));
+        Product updated = productService.update(mapper.toEntity(dto));
+        return ResponseEntity.ok(mapper.toDto(updated));
     }
 
     // ---------- PARTIAL UPDATE (price only) ----------
