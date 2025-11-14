@@ -26,13 +26,13 @@ dependencies {
 	// PostgreSQL driver
 	runtimeOnly 'org.postgresql:postgresql'
 
-	// MapStruct
-	compileOnly 'org.mapstruct:mapstruct:1.6.2'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
-
 	// Lombok
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// MapStruct
+	compileOnly 'org.mapstruct:mapstruct:1.6.2'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.2'
 
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
