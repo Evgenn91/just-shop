@@ -4,6 +4,9 @@ import evn.petproject.just_shop.dto.ProductDto;
 import evn.petproject.just_shop.entity.Product;
 import evn.petproject.just_shop.mapper.ProductMapper;
 import evn.petproject.just_shop.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +45,11 @@ public class ProductController {
     }
 
     // ---------- READ (all) ----------
+    @Operation(summary = "Получить все продукты")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Список продуктов получен"),
+            @ApiResponse(responseCode = "500", description = "Ошибка сервера")
+    })
     @GetMapping
     public ResponseEntity<List<ProductDto>> getAll() {
         List<ProductDto> products = productService.getAll()
