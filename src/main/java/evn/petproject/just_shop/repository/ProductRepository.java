@@ -5,12 +5,27 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    //don't forget use @Transactional fot this method!!!
+    @Transactional
     @Modifying
     @Query("UPDATE Product p SET p.price = :price, p.modifiedBy = :modifiedBy, p.updatedAt = CURRENT_TIMESTAMP, p.version = p.version + 1 WHERE p.id = :id AND p.version = :version")
     int updatePrice(@Param("id") Long id, @Param("price") BigDecimal price, @Param("modifiedBy") String modifiedBy, @Param("version") Long version);
+
+    @Transactional
+    @Modifying
+    @Query("""
+    UPDATE Product p
+    SET p.price = :price,
+        p.modifiedBy = :modifiedBy,
+        p.updatedAt = FUNCTION('NOW'),
+        p.version = p.version + 1
+    WHERE p.id = :id
+""")
+    int updatePriceForTest(@Param("id") Long id,
+                    @Param("price") BigDecimal price,
+                    @Param("modifiedBy") String modifiedBy);
 }
