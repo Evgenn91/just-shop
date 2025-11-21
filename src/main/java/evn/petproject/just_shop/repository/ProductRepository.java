@@ -11,21 +11,7 @@ import java.math.BigDecimal;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
-    @Modifying
-    @Query("UPDATE Product p SET p.price = :price, p.modifiedBy = :modifiedBy, p.updatedAt = CURRENT_TIMESTAMP, p.version = p.version + 1 WHERE p.id = :id AND p.version = :version")
+    @Modifying(clearAutomatically = true, flushAutomatically = true)//flushAutomatically — JPA сбрасывает изменения в БД перед UPDATE; clearAutomatically — очищает Persistence Context и JPA будет вынуждено сделать SELECT
+    @Query("UPDATE Product p SET p.price = :price, p.modifiedBy = :modifiedBy, p.updatedAt = FUNCTION('NOW'), p.version = p.version + 1 WHERE p.id = :id AND p.version = :version")
     int updatePrice(@Param("id") Long id, @Param("price") BigDecimal price, @Param("modifiedBy") String modifiedBy, @Param("version") Long version);
-
-    @Transactional
-    @Modifying
-    @Query("""
-    UPDATE Product p
-    SET p.price = :price,
-        p.modifiedBy = :modifiedBy,
-        p.updatedAt = FUNCTION('NOW'),
-        p.version = p.version + 1
-    WHERE p.id = :id
-""")
-    int updatePriceForTest(@Param("id") Long id,
-                    @Param("price") BigDecimal price,
-                    @Param("modifiedBy") String modifiedBy);
 }

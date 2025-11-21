@@ -51,10 +51,11 @@ public class ProductServiceIntegrationTest {
         Product saved = productService.create(product);
 
         boolean updated = productService.updatePrice(saved.getId(), BigDecimal.valueOf(60), "user1", saved.getVersion());
+
         assertTrue(updated);
 
         Product updatedProduct = productRepository.findById(saved.getId()).orElseThrow();
-        assertEquals(BigDecimal.valueOf(60), updatedProduct.getPrice());
+        assertEquals(0, updatedProduct.getPrice().compareTo(new BigDecimal("60")));
         assertEquals(saved.getVersion() + 1, updatedProduct.getVersion());
     }
 }
